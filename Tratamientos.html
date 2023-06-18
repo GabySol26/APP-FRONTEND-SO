@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabla de Tratamientos</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Tabla de Tratamientos</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#show-table-modal">
+                Mostrar Tabla
+              </button>
+        </div>
+        <div class="col-md-6 text-right">
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-user-modal">Agregar</button>
+        </div>
+      </div>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+            <th>ID</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Medicamento</th>
+            <th>Dosis</th>
+            <th>Frecuencia</th>
+            <th>Cita</th>
+        </tr>
+      </thead>
+      <tbody id="users-table-body">
+        <!-- Los usuarios se agregarán dinámicamente aquí -->
+      </tbody>
+    </table>
+
+    <!-- Modal para editar usuario -->
+    <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="edit-user-modal-label">Editar Tratamiento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-user-form">
+              <input type="hidden" id="edit-user-id">
+              <div class="form-group">
+                <label for="edit-inicio">Inicio</label>
+                <input type="date" class="form-control" id="edit-inicio" placeholder="Inicio">
+              </div>
+              <div class="form-group">
+                <label for="edit-fin">Fin</label>
+                <input type="date" class="form-control" id="edit-fin" finplaceholder="Fin">
+              </div>
+              <div class="form-group">
+                <label for="edit-med">Medicamento</label>
+                <input type="text" class="form-control" id="edit-med" placeholder="Medicamento">
+              </div>
+              <div class="form-group">
+                <label for="edit-dosis">Dosis</label>
+                <input type="text" class="form-control" id="edit-dosis" placeholder="Dosis">
+              </div>
+              <div class="form-group">
+                <label for="edit-frec">Frecuencia</label>
+                <input type="date" class="form-control" id="edit-frec" placeholder="Frecuencia">
+              </div>
+              <div class="form-group">
+                <label for="edit-cita">Cita</label>
+                <input type="text" class="form-control" id="edit-cita" placeholder="Cita">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="updateUser()">Guardar Cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para confirmar eliminación de usuario -->
+    <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="delete-user-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="delete-user-modal-label">Confirmar Eliminación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar este tratamiento?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" onclick="deleteUser()">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para agregar usuario -->
+    <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="add-user-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="add-user-modal-label">Agregar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="add-user-form">
+                <div class="form-group">
+                    <label for="add-inicio">Inicio</label>
+                    <input type="date" class="form-control" id="add-inicio" placeholder="Inicio">
+                </div>
+                <div class="form-group">
+                    <label for="add-fin">Fin</label>
+                    <input type="date" class="form-control" id="add-fin" placeholder="Fin">
+                  </div>
+                  <div class="form-group">
+                    <label for="add-med">Medicamento</label>
+                    <input type="text" class="form-control" id="add-med" placeholder="Medicamento">
+                  </div>
+                  <div class="form-group">
+                    <label for="add-dosis">Dosis</label>
+                    <input type="text" class="form-control" id="add-dosis" placeholder="Dosis">
+                  </div>
+                  <div class="form-group">
+                    <label for="add-frec">Frecuencia</label>
+                    <input type="text" class="form-control" id="add-frec" placeholder="Frecuencia">
+                  </div>
+                  <div class="form-group">
+                    <label for="add-cita">Cita</label>
+                    <input type="text" class="form-control" id="add-cita" placeholder="Cita">
+                  </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="addUser()">Agregar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para mostrar otra tabla -->
+    <div class="modal fade" id="show-table-modal" tabindex="-1" role="dialog" aria-labelledby="show-table-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="show-table-modal-label">Tabla de Ejemplo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <!-- Select de opciones -->
+            <div class="form-group">
+                <label for="select-options">Seleccionar opción:</label>
+                <select class="form-control" id="select-options">
+                <option value="opcion1">Tabla Pacientes</option>
+                <option value="opcion2">Tabla Medicos</option>
+                <option value="opcion3">Tabla Citas</option>
+                <option value="opcion4">Tabla Tratamientos</option>
+                </select>
+            </div>
+                <!-- Botón para cambiar a otra tabla -->
+                <button type="button" class="btn btn-primary" onclick="showOtherTable()">Cambiar Tabla</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Función para mostrar la tabla de usuarios
+    function showUsers() {
+      var tableBody = $("#users-table-body");
+      tableBody.empty();
+
+      fetch("http://54.208.36.141:5000/tratamientos")
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(function (user){
+            var row = $("<tr></tr>");
+
+            var idCell = $("<td></td>").text(user.id);
+            var inicioCell = $("<td></td>").text(user.inicio);
+            var finCell = $("<td></td>").text(user.fin);
+            var medCell = $("<td></td>").text(user.medicamento);
+            var dosisCell = $("<td></td>").text(user.dosis);
+            var frecCell = $("<td></td>").text(user.frecuencia);
+            var citaCell = $("<td></td>").text(user.cita);
+            var actionsCell = $("<td></td>");
+            
+            var editButton = $("<button></button>").addClass("btn btn-primary btn-sm mr-2").text("Editar").click(function () {
+            editUser(user.id);
+            });
+
+            var deleteButton = $("<button></button>").addClass("btn btn-danger btn-sm").text("Eliminar").click(function () {
+            confirmDeleteUser(user.id);
+            });
+
+            actionsCell.append(editButton, deleteButton);
+            row.append(idCell, inicioCell, finCell, medCell, dosisCell, frecCell, citaCell, actionsCell);
+            tableBody.append(row);
+        });
+      })
+      .catch(error => {
+        console.log("Error al obtener los tratamientos", error);
+      });
+    }
+
+    // Función para cambiar a otra tabla
+    function showOtherTable() {
+        var selectedOption = $("#select-options").val();
+
+        // Ocultar la tabla actual
+        $("#current-table").hide();
+
+        // Mostrar la tabla seleccionada
+        if (selectedOption === "opcion1") {
+            $("#tabla-opcion1").show();
+        } else if (selectedOption === "opcion2") {
+            $("#tabla-opcion2").show();
+        } else if (selectedOption === "opcion3") {
+            $("#tabla-opcion3").show();
+        } else if (selectedOption === "opcion4") {
+            $("#tabla-opcion4").show();
+        }
+    }
+
+
+    // Función para editar un usuario
+    function editUser(userId) {
+      var user = users.find(function (user) {
+        return user.id === userId;
+      });
+
+      $("#edit-user-id").val(user.id);
+      $('#edit-inicio').val(user.inicio);
+      $('#edit-fin').val(user.fin);
+      $('#edit-med').val(user.medicamento);
+      $('#edit-dosis').val(user.dosis);
+      $('#edit-frec').val(user.frecuencia);
+      $('#edit-cita').val(user.cita);
+
+      $("#edit-user-modal").modal("show");
+    }
+
+    // Función para guardar los cambios de un usuario editado
+    function updateUser() {
+      var userId = parseInt($("#edit-user-id").val());
+      var newInicio = $("#edit-inicio").val();
+      var newFin = $("#edit-fin").val();
+      var newMed = $("#edit-med").val();
+      var newDosis = $("#edit-dosis").val();
+      var newFrec = $("#edit-frec").val();
+      var newCita = $("#edit-cita").val();
+
+      var pacienteData = {
+        id: userId,
+        inicio: newInicio,
+        fin: newFin,
+        medicamento: newMed,
+        dosis: newDosis,
+        frecuencia: newFrec,
+        cita: newCita
+      };
+
+      fetch("http://54.208.36.141:5000/tratamiento/" + userId, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pacienteData)
+      })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Tratamiento actualizado", data);
+            $("#edit-user-modal").modal("hide");
+            showUsers();
+        })
+        .catch(error => {
+            console.log("Error al actualizar el tratamiento", error);
+        });
+    }
+
+    // Función para confirmar la eliminación de un usuario
+    function confirmDeleteUser(userId) {
+      var user = users.find(function (user) {
+        return user.id === userId;
+      });
+
+      $("#delete-user-modal").modal("show");
+    }
+
+    // Función para eliminar un usuario
+    function deleteUser() {
+      var userId = parseInt($("#edit-user-id").val());
+      fetch("http://54.208.36.141:5000/tratamiento/" + userId, {
+        method: "DELETE"
+      })
+      .then(response =>{
+        if(response.ok){
+            users = users.filter(function (user) {
+                return user.id !== userId;
+              });
+        
+              $("#delete-user-modal").modal("hide");
+              showUsers();
+            } else {
+                console.log("Error al eliminar el tratamiento");
+            }
+        })
+        .catch(error => {
+            console.log("Error al eliminar el tratamiento", error);
+        });
+    }
+
+    // Función para agregar un nuevo usuario
+    function addUser() {
+      var newInicio = $("#add-inicio").val();
+      var newFin = $("#add-fin").val();
+      var newMed = $("#add-med").val();
+      var newDosis = $("#add-dosis").val();
+      var newFrec = $("#add-frec").val();
+      var newCita = $("#add-cita").val();
+
+      var newUser = {
+         inicio: newInicio,
+          fin: newFin,
+          medicamento: newMed,
+          dosis: newDosis,
+          frecuencia: newFrec,
+          cita: newCita
+        };
+        
+      fetch("http://54.208.36.141:5000/tratamiento", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newUser)
+      })
+      .then(response => {
+        if(response.ok){
+            return response.json();
+        } else {
+            console.log("Error al agregar el tratamiento");
+            throw new "Error al agregar el tratamiento";
+        }
+      })
+      .then(data => {
+        newUser.id = data.id;
+        users.push(newUser);
+        $("#add-user-modal").modal("hide");
+        showUsers();
+      })
+      .catch(error => {
+        console.log("Error al agregar el tratamiento", error);
+      }); 
+    }
+
+    $(document).ready(function () {
+      showUsers();
+    });
+  </script>
+</body>
+</html>
