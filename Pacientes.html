@@ -1,416 +1,321 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Tabla de Pacientes </title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css">
+    <title>Tabla Pacientes</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Tabla de Pacientes</h1>
+<div class="container" id="vuejscrudapp">
     <div class="row">
-        <div class="col-md-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#show-table-modal">
-                Mostrar Tabla
-              </button>
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">PACIENTES</h1>
+            <hr>
         </div>
-        <div class="col-md-6 text-right">
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-user-modal">Agregar</button>
-        </div>
-      </div>
-    <br>
-    <table class="table">
-      <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido Paterno</th>
-            <th>Apellido Materno</th>
-            <th>DNI</th>
-            <th>Género</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Correo Electrónico</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="users-table-body">
-        <!-- Los usuarios se agregarán dinámicamente aquí -->
-      </tbody>
-    </table>
-
-    <!-- Modal para editar usuario -->
-    <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="edit-user-modal-label">Editar Usuario</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="edit-user-form">
-              <input type="hidden" id="edit-user-id">
-              <div class="form-group">
-                <label for="edit-name">Nombre</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-              <div class="form-group">
-                <label for="edit-ap">Apellido Paterno</label>
-                <input type="text" class="form-control" id="edit-ap" placeholder="Apellido Paterno">
-              </div>
-              <div class="form-group">
-                <label for="edit-am">Apellido Materno</label>
-                <input type="text" class="form-control" id="edit-am" placeholder="  Apellido Materno">
-              </div>
-              <div class="form-group">
-                <label for="edit-dni">DNI</label>
-                <input type="text" class="form-control" id="edit-dni" placeholder="DNI">
-              </div>
-              <div class="form-group">
-                <label for="edit-gen">Género</label>
-                <select class="form-control" id="edit-gen">
-                    <option value="">Seleccionar</option>
-                    <option value="F">Femenino</option>
-                    <option value="M">Masculino</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="edit-fech">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="edit-fech" placeholder="Fecha de Nacimiento">
-              </div>
-              <div class="form-group">
-                <label for="edit-correo">Correo Electrónico</label>
-                <input type="text" class="form-control" id="edit-correo" placeholder="Correo Electrónico">
-              </div>
-              <div class="form-group">
-                <label for="edit-telef">Teléfono</label>
-                <input type="text" class="form-control" id="edit-telef" placeholder="Teléfono">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onclick="updateUser()">Guardar Cambios</button>
-          </div>
-        </div>
-      </div>
     </div>
-
-    <!-- Modal para confirmar eliminación de usuario -->
-    <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="delete-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="delete-user-modal-label">Confirmar Eliminación</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar este paciente?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" onclick="deleteUser()">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal para agregar usuario -->
-    <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="add-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="add-user-modal-label">Agregar Paciente</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="add-user-form">
-                <div class="form-group">
-                    <label for="add-name">Nombre</label>
-                    <input type="text" class="form-control" id="add-name" placeholder="Nombre">
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+        <div>
+            <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Paciente</b-button>
+            <b-modal ref="Agregar" hide-footer title="Añade Paciente">
+                <div>
+                    <form action="" @submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            <input type="text" v-model="nombreP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Apellido Paterno</label>
+                            <input type="text" v-model="apellidoPP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Apellido Materno</label>
+                            <input type="text" v-model="apellidoMP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">DNI</label>
+                            <input type="text" v-model="dni" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Genero</label>
+                            <select v-model="generoP" class="form-control">
+                                <option disabled value="">Seleccione</option>
+                                <option>F</option>
+                                <option>M</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Telefono</label>
+                            <input type="text" v-model="telefonoP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Fecha de Nacimiento</label>
+                            <input type="date" v-model="fnacimiento" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            <input type="text" v-model="email" class="form-control">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="asd-ap">Apellido Paterno</label>
-                    <input type="text" class="form-control" id="edit-name" placeholder="Apellido Paterno">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-am">Apellido Materno</label>
-                    <input type="text" class="form-control" id="edit-name" placeholder="Apellido Materno">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-dni">DNI</label>
-                    <input type="text" class="form-control" id="edit-name" placeholder="DNI">
-                  </div>
-                  <div class="form-group">
-                    <label for="edit-gen">Género</label>
-                    <select class="form-control" id="edit-gen">
-                        <option value="">Seleccionar</option>
-                        <option value="F">Femenino</option>
-                        <option value="M">Masculino</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="add-fech">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" id="edit-name" placeholder="Fecha de Nacimiento">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-correo">Correo Electrónico</label>
-                    <input type="text" class="form-control" id="edit-name" placeholder="Correo Electrónico">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-telef">Teléfono</label>
-                    <input type="text" class="form-control" id="edit-name" placeholder="Teléfono">
-                  </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onclick="addUser()">Agregar</button>
-          </div>
+            </b-modal>
         </div>
-      </div>
+        <!--
+        <div class="form-group">
+            <b-form-select @change="cambiarTabla" v-model="tablaSeleccionada" class="form-control">
+                <option disabled value="" >Seleccione Tabla</option>
+                <option value="Pacientes.html">Tabla Paciente</option>
+                <option value="Medicos.html">Tabla Medico</option>
+                <option value="Citas.html">Tabla Cita</option>
+                <option value="Tratamientos.html">Tabla Tratamiento</option>
+            </b-form-select>
+        </div>-->
     </div>
 
-    <!-- Modal para mostrar otra tabla -->
-    <div class="modal fade" id="show-table-modal" tabindex="-1" role="dialog" aria-labelledby="show-table-modal-label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="show-table-modal-label">Tabla de Ejemplo</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <!--EDITAR-->
+    <div>
+        <b-modal ref="EditarModal"  hide-footer title="Editar Paciente">
+            <div>
+                <form action="" @submit.prevent="onUpdate">
+                    <div class="form-group">
+                        <label for="">ID Paciente</label>
+                        <input type="text" :value="eidPaciente" class="form-control" disabled>
+                      </div>
+                    <div class="form-group">
+                        <label for="">Nombre</label>
+                        <input type="text" :value="enombreP" @input="enombreP = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Apellido Paterno</label>
+                        <input type="text" :value="eapellidoPP" @input="eapellidoPP = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Apellido Materno</label>
+                        <input type="text" :value="eapellidoMP" @input="eapellidoMP = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">DNI</label>
+                        <input type="text" :value="edni" @input="edni = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Genero</label>
+                        <select :value="egeneroP" @input="egeneroP = $event.target.value" class="form-control">
+                            <option disabled value="">Seleccione</option>
+                            <option>F</option>
+                            <option>M</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Telefono</label>
+                        <input type="text" :value="etelefonoP" @input="etelefonoP = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Fecha de Nacimiento</label>
+                        <input type="date" :value="efnacimiento" @input="efnacimiento = $event.target.value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email</label>
+                        <input type="text" :value="eemail" @input="eemail = $event.target.value" class="form-control">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <button class="btn btn-primary">Guardar</button>
+                        <button variant="online danger" @click="hideModal('EditarModal')" class="btn btn-danger">Cancelar</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-body">
-            <!-- Select de opciones -->
-            <div class="form-group">
-                <label for="select-options">Seleccionar opción:</label>
-                <select class="form-control" id="select-options">
-                <option value="opcion1">Tabla Pacientes</option>
-                <option value="opcion2">Tabla Medicos</option>
-                <option value="opcion3">Tabla Citas</option>
-                <option value="opcion4">Tabla Tratamientos</option>
-                </select>
-            </div>
-                <!-- Botón para cambiar a otra tabla -->
-                <button type="button" class="btn btn-primary" onclick="showOtherTable()">Cambiar Tabla</button>
-            </div>
-        </div>
+        </b-modal>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>DNI</th>
+                        <th>Género</th>
+                        <th>Teléfono</th>
+                        <th>Nacimiento</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="patient in patients" :key="patient.idPaciente">
+                        <td>{{ patient.idPaciente }}</td>
+                        <td>{{ patient.nombreP }}</td>
+                        <td>{{ patient.apellidoPP }}</td>
+                        <td>{{ patient.apellidoMP }}</td>
+                        <td>{{ patient.dni }}</td>
+                        <td>{{ patient.generoP }}</td>
+                        <td>{{ patient.telefonoP }}</td>
+                        <td>{{ patient.fnacimiento }}</td>
+                        <td>{{ patient.email }}</td>
+                        <td>
+                            <button @click="deletePaciente(patient.idPaciente)" class="btn btn-danger">Eliminar</button>
+                            <button @click="editPaciente(patient.idPaciente, patient.nombreP, patient.apellidoPP, patient.apellidoMP, 
+                            patient.dni, patient.generoP, patient.telefonoP,patient.fnacimiento,patient.email)" class="btn btn-primary">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-  </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    // Función para mostrar la tabla de usuarios
-    function showUsers() {
-      var tableBody = $("#users-table-body");
-      tableBody.empty();
-
-      fetch("http://54.208.36.141:5000/pacientes")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(function (user){
-            var row = $("<tr></tr>");
-
-            var idCell = $("<td></td>").text(user.id);
-            var nameCell = $("<td></td>").text(user.name);
-            var apCell = $("<td></td>").text(user.apellidop);
-            var amCell = $("<td></td>").text(user.apellidom);
-            var dniCell = $("<td></td>").text(user.dni);
-            var genCell = $("<td></td>").text(user.genero);
-            var fechaCell = $("<td></td>").text(user.fecha);
-            var correoCell = $("<td></td>").text(user.correo);
-            var telefCell = $("<td></td>").text(user.telefono);
-            var actionsCell = $("<td></td>");
-            
-            var editButton = $("<button></button>").addClass("btn btn-primary btn-sm mr-2").text("Editar").click(function () {
-            editUser(user.id);
-            });
-
-            var deleteButton = $("<button></button>").addClass("btn btn-danger btn-sm").text("Eliminar").click(function () {
-            confirmDeleteUser(user.id);
-            });
-
-            actionsCell.append(editButton, deleteButton);
-            row.append(idCell, nameCell, apCell, amCell, dniCell,genCell,fechaCell,correoCell,telefCell, actionsCell);
-            tableBody.append(row);
-        });
-      })
-      .catch(error => {
-        console.log("Error al obtener los pacientes", error);
-      });
-    }
-
-    // Función para cambiar a otra tabla
-    function showOtherTable() {
-        var selectedOption = $("#select-options").val();
-
-        // Ocultar la tabla actual
-        $("#current-table").hide();
-
-        // Mostrar la tabla seleccionada
-        if (selectedOption === "opcion1") {
-            $("#tabla-opcion1").show();
-        } else if (selectedOption === "opcion2") {
-            $("#tabla-opcion2").show();
-        } else if (selectedOption === "opcion3") {
-            $("#tabla-opcion3").show();
-        } else if (selectedOption === "opcion4") {
-            $("#tabla-opcion4").show();
-        }
-    }
-
-
-    // Función para editar un usuario
-    function editUser(userId) {
-      var user = users.find(function (user) {
-        return user.id === userId;
-      });
-
-      $("#edit-user-id").val(user.id);
-      $("#edit-name").val(user.name);
-      $("#edit-ap").val(user.apellidop);
-      $("#edit-am").val(user.apellidom);
-      $("#edit-dni").val(user.dni);
-      $("#edit-gen").val(user.genero);
-      $("#edit-fech").val(user.fecha);
-      $("#edit-correo").val(user.correo);
-      $("#edit-telef").val(user.telefono);
-
-      $("#edit-user-modal").modal("show");
-    }
-
-    // Función para guardar los cambios de un usuario editado
-    function updateUser() {
-      var userId = parseInt($("#edit-user-id").val());
-      var newName = $("#edit-name").val();
-      var newAp = $("#edit-ap").val();
-      var newAm = $("#edit-am").val();
-      var newDni = $("#edit-dni").val();
-      var newGen = $("#edit-gen").val();
-      var newFecha = $("#edit-fech").val();
-      var newCorreo = $("#edit-correo").val();
-      var newTelef = $("#edit-telef").val();
-
-      var pacienteData = {
-        id: userId,
-        name: newName,
-        apellidop: newAp,
-        apellidom: newAm,
-        dni: newDni,
-        genero: newGen,
-        fecha: newFecha,
-        correo: newCorreo,
-        telefono: newTelef
-      };
-
-      fetch("http://54.208.36.141:5000/paciente/" + userId, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idPaciente: '',
+            nombreP: '',
+            apellidoPP: '',
+            apellidoMP: '',
+            dni: '',
+            generoP: '',
+            telefonoP: '',
+            fnacimiento: '',
+            email: '',
+            patients: [],
+            eidPaciente: '',
+            enombreP: '',
+            eapellidoPP: '',
+            eapellidoMP: '',
+            edni: '',
+            egeneroP: '',
+            etelefonoP: '',
+            efnacimiento: '',
+            eemail: '',
         },
-        body: JSON.stringify(pacienteData)
-      })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Paciente actualizado", data);
-            $("#edit-user-modal").modal("hide");
-            showUsers();
-        })
-        .catch(error => {
-            console.log("Error al actualizar el paciente", error);
-        });
-    }
+        methods: {
+            showModal(id) {
+                this.$refs[id].show()
+            },
 
-    // Función para confirmar la eliminación de un usuario
-    function confirmDeleteUser(userId) {
-      var user = users.find(function (user) {
-        return user.id === userId;
-      });
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
 
-      $("#delete-user-modal").modal("show");
-    }
+            onSubmit(){
+                axios.post('http://52.91.251.88:5000/paciente', {
+                    nombreP: this.nombreP,
+                    apellidoPP: this.apellidoPP,
+                    apellidoMP: this.apellidoMP,
+                    dni: this.dni,
+                    generoP: this.generoP,
+                    telefonoP: this.telefonoP,
+                    fnacimiento: this.fnacimiento,
+                    email: this.email
+                })
+                .then(res => {
+                    console.log(res)
+                    alert("Paciente agregado")
+                    app.hideModal('Agregar')
+                    app.getPacientes()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
 
-    // Función para eliminar un usuario
-    function deleteUser() {
-      var userId = parseInt($("#edit-user-id").val());
-      fetch("http://54.208.36.141:5000/paciente/" + userId, {
-        method: "DELETE"
-      })
-      .then(response =>{
-        if(response.ok){
-            users = users.filter(function (user) {
-                return user.id !== userId;
-              });
-        
-              $("#delete-user-modal").modal("hide");
-              showUsers();
-            } else {
-                console.log("Error al eliminar el paciente");
-            }
-        })
-        .catch(error => {
-            console.log("Error al eliminar el paciente", error);
-        });
-    }
+            getPacientes() {
+                axios({
+                    url:'http://52.91.251.88:5000/pacientes',
+                    method: 'get',
+                })
+                .then(response => {
+                    console.log(response)
+                    this.patients = response.data.Pacientes
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
 
-    // Función para agregar un nuevo usuario
-    function addUser() {
-      var newName = $("#add-name").val();
-      var newAp = $("#add-ap").val();
-      var newAm = $("#add-am").val();
-      var newDni = $("#add-dni").val();
-      var newGen = $("#add-gen").val();
-      var newFecha = $("#add-fech").val();
-      var newCorreo = $("#add-correo").val();
-      var newTelef = $("#add-telef").val();
+            editPaciente(idPaciente, nombreP, apellidoPP, apellidoMP, dni, generoP, telefonoP, fnacimiento, email) {
+                axios.get('http://52.91.251.88:5000/paciente/' + idPaciente)
+                .then(res => {
+                    console.log(res.data);
+                    this.eidPaciente = idPaciente
+                    this.enombreP = nombreP
+                    this.eapellidoPP = apellidoPP
+                    this.eapellidoMP = apellidoMP
+                    this.edni = dni
+                    this.egeneroP = generoP
+                    this.etelefonoP = telefonoP
+                    this.efnacimiento = fnacimiento
+                    this.eemail = email
+                    app.showModal('EditarModal');
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            },
 
-      var newUser = {
-         name: newName, 
-         apellidop: newAp,
-         apellidom: newAm,
-         dni: newDni,
-         genero: newGen,
-         fecha: newFecha,
-         correo: newCorreo,
-         telefono: newTelef
-        };
-      fetch("http://54.208.36.141:5000/paciente", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+            onUpdate(){
+                axios.put('http://52.91.251.88:5000/paciente/' + this.eidPaciente,{
+                    nombreP: this.enombreP,
+                    apellidoPP: this.eapellidoPP,
+                    apellidoMP: this.eapellidoMP,
+                    dni: this.edni,
+                    generoP: this.egeneroP,
+                    telefonoP: this.etelefonoP,
+                    fnacimiento: this.efnacimiento,
+                    email: this.eemail
+                })
+                .then(res =>{
+                    console.log(res)
+                    alert("Paciente actualizado");
+                    this.eidPaciente = '';
+                    this.enombreP = '';
+                    this.eapellidoPP = '';
+                    this.eapellidoMP = '';
+                    this.edni = '';
+                    this.egeneroP = '';
+                    this.etelefonoP = '';
+                    this.efnacimiento = '';
+                    this.eemail = '';
+                    app.hideModal('EditarModal');
+                    app.getPacientes();
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
+
+            deletePaciente(idPaciente){
+                axios.delete('http://52.91.251.88:5000/paciente/' + idPaciente)
+                .then(res =>{
+                    console.log(res)
+                    alert("Paciente eliminado")
+                    app.getPacientes()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
         },
-        body: JSON.stringify(newUser)
-      })
-      .then(response => {
-        if(response.ok){
-            return response.json();
-        } else {
-            console.log("Error al agregar el paciente");
-            throw new "Error al agregar el paciente";
-        }
-      })
-      .then(data => {
-        newUser.id = data.id;
-        users.push(newUser);
-        $("#add-user-modal").modal("hide");
-        showUsers();
-      })
-      .catch(error => {
-        console.log("Error al agregar el paciente", error);
-      }); 
-    }
-
-    $(document).ready(function () {
-      showUsers();
-    });
-  </script>
+        mounted:function() 
+        {
+            this.getPacientes()
+        }    
+    })
+</script>
 </body>
 </html>
