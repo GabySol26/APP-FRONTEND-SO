@@ -1,364 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Tabla de Citas</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Citas</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Tabla de Citas</h1>
+<div class="container" id="vuejscrudapp">
     <div class="row">
-        <div class="col-md-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#show-table-modal">
-                Mostrar Tabla
-              </button>
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">CITAS</h1>
+            <hr>
         </div>
-        <div class="col-md-6 text-right">
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-user-modal">Agregar</button>
-        </div>
-      </div>
-    <br>
-    <table class="table">
-      <thead>
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Nota</th>
-            <th>Paciente</th> <!--ID PACIENTE-->
-            <th>Medico</th> <!--ID MEDICO-->
-            <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="users-table-body">
-        <!-- Los usuarios se agregarán dinámicamente aquí -->
-      </tbody>
-    </table>
-
-    <!-- Modal para editar usuario -->
-    <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="edit-user-modal-label">Editar Cita</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="edit-user-form">
-              <input type="hidden" id="edit-user-id">
-              <div class="form-group">
-                <label for="edit-name">Fecha</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-              <div class="form-group">
-                <label for="edit-name">Hora</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-              <div class="form-group">
-                <label for="edit-name">Nota</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-              <div class="form-group">
-                <label for="edit-name">Paciente</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-              <div class="form-group">
-                <label for="edit-name</label>
-                <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onclick="updateUser()">Guardar Cambios</button>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- Modal para confirmar eliminación de usuario -->
-    <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="delete-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="delete-user-modal-label">Confirmar Eliminación</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar esta cita?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" onclick="deleteUser()">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal para agregar usuario -->
-    <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="add-user-modal-label" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="add-user-modal-label">Agregar Cita</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="add-user-form">
-                <div class="form-group">
-                    <label for="add-fech">Fecha</label>
-                    <input type="date" class="form-control" id="add-fech" placeholder="Fecha">
-                </div>
-                <div class="form-group">
-                    <label for="add-hr">Hora</label>
-                    <input type="time" class="form-control" id="edit-hr" placeholder="Hora">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-nt">Nota</label>
-                    <input type="text" class="form-control" id="edit-nt" placeholder="Nota">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-pac">Paciente</label>
-                    <input type="text" class="form-control" id="edit-pac" placeholder="Paciente">
-                  </div>
-                  <div class="form-group">
-                    <label for="add-med">Medico</label>
-                    <input type="text" class="form-control" id="edit-med" placeholder="Medico">
-                  </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" onclick="addUser()">Agregar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal para mostrar otra tabla -->
-    <div class="modal fade" id="show-table-modal" tabindex="-1" role="dialog" aria-labelledby="show-table-modal-label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="show-table-modal-label">Tabla de Ejemplo</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-            <!-- Select de opciones -->
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+      <div>
+        <b-button @click=showModal('Agregar') class="btn btn-success">Agregar Cita</b-button>
+        <b-modal ref="Agregar" hide-footer title="Añade Cita">
+          <form action="" @submit.prevent="onSubmit">
             <div class="form-group">
-                <label for="select-options">Seleccionar opción:</label>
-                <select class="form-control" id="select-options">
-                <option value="opcion1">Tabla Pacientes</option>
-                <option value="opcion2">Tabla Medicos</option>
-                <option value="opcion3">Tabla Citas</option>
-                <option value="opcion4">Tabla Tratamientos</option>
-                </select>
+              <label for="fecha">Fecha</label>
+              <input type="date" class="form-control" id="fecha" v-model="fecha">
             </div>
-                <!-- Botón para cambiar a otra tabla -->
-                <button type="button" class="btn btn-primary" onclick="showOtherTable()">Cambiar Tabla</button>
+            <div class="form-group">
+              <label for="hora">Hora</label>
+              <input type="time" class="form-control" id="hora" v-model="hora">
             </div>
-        </div>
+            <div class="form-group">
+              <label for="nota">Nota</label>
+              <input type="text" class="form-control" id="nota" v-model="nota">
+            </div>
+            <div class="form-group">
+              <label for="idPaciente">Paciente</label>
+              <input type="text" class="form-control" id="idPaciente" v-model="idPaciente">
+            </div>
+            <div class="form-group">
+              <label for="idMedico">Medico</label>
+              <input type="text" class="form-control" id="idMedico" v-model="idMedico">
+            </div>
+            <br>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+          </div>
+          </form>
+        </b-modal>
+      </div>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Nota</th>
+                        <th>Paciente</th>
+                        <th>Medico</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="cita in citas" :key="cita.idCita">
+                        <td>{{ cita.idCita }}</td>
+                        <td>{{ cita.fecha }}</td>
+                        <td>{{ cita.hora }}</td>
+                        <td>{{ cita.nota }}</td>
+                        <td>{{ cita.idPaciente }}</td>
+                        <td>{{ cita.idMedico }}</td>
+                        <td>
+                            <button @click="deleteCita(cita.idCita)" class="btn btn-danger">Eliminar</button>
+                            <button @click="editCita(cita.idCita,cita.fecha,cita.hora,cita.nota,cita.idPaciente,cita.idMedico)" class="btn btn-primary">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    // Función para mostrar la tabla de usuarios
-    function showUsers() {
-      var tableBody = $("#users-table-body");
-      tableBody.empty();
+    <!--EDITAR-->
+    <div>
+      <b-modal ref="Editar" hide-footer title="Editar Cita">
+        <div>
+          <form @submit.prevent="onUpdate">
+            <div class="form-group">
+              <label for="idCita">ID</label>
+              <input type="text" class="form-control" id="idCita" :value="eidCita" disabled>
+            </div>
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" class="form-control" id="fecha" :value="efecha" @input="efecha = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="hora">Hora</label>
+              <input type="time" class="form-control" id="hora" :value="ehora" @input="ehora = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="nota">Nota</label>
+              <input type="text" class="form-control" id="nota" :value="enota" @input="enota = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="idPaciente">Paciente</label>
+              <input type="text" class="form-control" id="idPaciente" :value="idPaciente" @input="idPaciente = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="idMedico">Medico</label>
+              <input type="text" class="form-control" id="idMedico" :value="idMedico" @input="idMedico = $event.target.value">
+            </div>
+            <br>
+            <div class="form-group">
+              <button class="btn btn-primary">Guardar</button>
+              <button variant="online danger" @click="hideModal('Editar')" class="btn btn-danger">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+    </div>
+</div>
 
-      fetch("http://54.208.36.141:5000/citas")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(function (user){
-            var row = $("<tr></tr>");
-
-            var idCell = $("<td></td>").text(user.id);
-            var fechaCell = $("<td></td>").text(user.fecha);
-            var horaCell = $("<td></td>").text(user.hora);
-            var notaCell = $("<td></td>").text(user.nota);
-            var pacienteCell = $("<td></td>").text(user.paciente);	
-            var medicoCell = $("<td></td>").text(user.medico);
-            var actionsCell = $("<td></td>");
-            
-            var editButton = $("<button></button>").addClass("btn btn-primary btn-sm mr-2").text("Editar").click(function () {
-            editUser(user.id);
-            });
-
-            var deleteButton = $("<button></button>").addClass("btn btn-danger btn-sm").text("Eliminar").click(function () {
-            confirmDeleteUser(user.id);
-            });
-
-            actionsCell.append(editButton, deleteButton);
-            row.append(idCell, fechaCell, horaCell, notaCell, pacienteCell, medicoCell, actionsCell);
-            tableBody.append(row);
-        });
-      })
-      .catch(error => {
-        console.log("Error al obtener las citas", error);
-      });
-    }
-
-    // Función para cambiar a otra tabla
-    function showOtherTable() {
-        var selectedOption = $("#select-options").val();
-
-        // Ocultar la tabla actual
-        $("#current-table").hide();
-
-        // Mostrar la tabla seleccionada
-        if (selectedOption === "opcion1") {
-            $("#tabla-opcion1").show();
-        } else if (selectedOption === "opcion2") {
-            $("#tabla-opcion2").show();
-        } else if (selectedOption === "opcion3") {
-            $("#tabla-opcion3").show();
-        } else if (selectedOption === "opcion4") {
-            $("#tabla-opcion4").show();
-        }
-    }
-
-
-    // Función para editar un usuario
-    function editUser(userId) {
-      var user = users.find(function (user) {
-        return user.id === userId;
-      });
-
-      $("#edit-user-id").val(user.id);
-      $('#edit-fech').val(user.fecha);
-      $('#edit-hr').val(user.hora);
-      $('#edit-nt').val(user.nota);
-      $('#edit-pac').val(user.paciente);
-      $('#edit-med').val(user.medico);
-
-      $("#edit-user-modal").modal("show");
-    }
-
-    // Función para guardar los cambios de un usuario editado
-    function updateUser() {
-      var userId = parseInt($("#edit-user-id").val());
-      var newFecha = $("#edit-fech").val();
-      var newHora = $("#edit-hr").val();
-      var newNota = $("#edit-nt").val();
-      var newPaciente = $("#edit-pac").val();   
-      var newMedico = $("#edit-med").val();
-      
-      var pacienteData = {
-        id: userId,
-        fecha: newFecha,
-        hora: newHora,
-        nota: newNota,
-        paciente: newPaciente,
-        medico: newMedico
-      };
-
-      fetch("http://54.208.36.141:5000/cita/" + userId, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idCita: '',
+            fecha: '',
+            hora: '',
+            nota: '',
+            idPaciente: '',
+            idMedico: '',
+            citas: [],
+            eidCita: '',
+            efecha: '',
+            ehora: '',
+            enota: '',
+            eidPaciente: '',
+            eidMedico: '',
+            cita: {}
         },
-        body: JSON.stringify(pacienteData)
-      })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Cita actualizado", data);
-            $("#edit-user-modal").modal("hide");
-            showUsers();
-        })
-        .catch(error => {
-            console.log("Error al actualizar la cita", error);
-        });
-    }
+        methods: {
+            showModal(id) {
+                this.$refs[id].show()
+            },
 
-    // Función para confirmar la eliminación de un usuario
-    function confirmDeleteUser(userId) {
-      var user = users.find(function (user) {
-        return user.id === userId;
-      });
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
 
-      $("#delete-user-modal").modal("show");
-    }
+            getCitas() {
+                axios.get('http://52.91.251.88:5000/citas')
+                    .then(response => {
+                        console.log(response)
+                        this.citas = response.data.Citas
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
 
-    // Función para eliminar un usuario
-    function deleteUser() {
-      var userId = parseInt($("#edit-user-id").val());
-      fetch("http://54.208.36.141:5000/cita/" + userId, {
-        method: "DELETE"
-      })
-      .then(response =>{
-        if(response.ok){
-            users = users.filter(function (user) {
-                return user.id !== userId;
+            onSubmit() {
+                axios.get('http://52.91.251.88:5000/paciente/${this.idPaciente}')
+                axios.get('http://52.91.251.88:5000/medico/${this.idMedico}')
+                axios.post('http://52.91.251.88:5000/cita', {
+                    fecha: this.fecha,
+                    hora: this.hora,
+                    nota: this.nota,
+                    idPaciente: this.idPaciente,
+                    idMedico: this.idMedico
+                })
+                .then(response => {
+                  console.log(response)
+                  alert("Cita agregado")
+                  app.hideModal('Agregar')
+                  app.getCitas()
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+            },
+
+            deleteCita(idCita) {
+                axios.delete('http://52.91.251.88:5000/cita/' + idCita)
+                .then(res=>{
+                  console.log(res)
+                  alert("Cita eliminada")
+                  app.getCitas()
+                })
+                .catch(err=>{
+                  console.log(err)
+                })
+            },
+
+            editCita(idCita, fecha, hora, nota, idPaciente, idMedico) {
+              axios.get('http://52.91.251.88:5000/cita/' + idCita)
+                .then(response => {
+                  this.eidCita = idCita;
+                  this.efecha = fecha;
+                  this.ehora = hora;
+                  this.enota = nota;
+                  this.idPaciente = idPaciente;
+                  this.idMedico = idMedico;
+                  app.showModal('Editar')
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            },
+
+            onUpdate() {
+              const url = 'http://52.91.251.88:5000/cita/' + this.eidCita;
+
+              axios.put(url,{
+                fecha: this.efecha,
+                hora: this.ehora,
+                nota: this.enota,
+                idPaciente: this.idPaciente,
+                idMedico: this.idMedico
+              })
+              .then(res => {
+                console.log(res);
+                alert('Cita actualizada');
+                this.hideModal('Editar');
+                this.getCitas();
+              })
+              .catch(err => {
+                console.log(err);
               });
-        
-              $("#delete-user-modal").modal("hide");
-              showUsers();
-            } else {
-                console.log("Error al eliminar la cita");
-            }
-        })
-        .catch(error => {
-            console.log("Error al eliminar la cita", error);
-        });
-    }
-
-    // Función para agregar un nuevo usuario
-    function addUser() {
-      var newFecha = $("#add-fech").val();
-      var newHora = $("#add-hr").val();
-      var newNota = $("#add-nt").val(); 
-      var newPaciente = $("#add-pac").val();
-      var newMedico = $("#add-med").val();
-
-      var newUser = {
-         fecha: newFecha,
-         hora: newHora,
-         nota: newNota,
-         paciente: newPaciente,
-         medico: newMedico
-        };
-
-      fetch("http://54.208.36.141:5000/cita", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+            },
         },
-        body: JSON.stringify(newUser)
-      })
-      .then(response => {
-        if(response.ok){
-            return response.json();
-        } else {
-            console.log("Error al agregar la cita");
-            throw new "Error al agregar la cita";
+        mounted() {
+            this.getCitas()
         }
-      })
-      .then(data => {
-        newUser.id = data.id;
-        users.push(newUser);
-        $("#add-user-modal").modal("hide");
-        showUsers();
-      })
-      .catch(error => {
-        console.log("Error al agregar la cita", error);
-      }); 
-    }
-
-    $(document).ready(function () {
-      showUsers();
-    });
-  </script>
+    })
+</script>
 </body>
 </html>
